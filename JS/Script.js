@@ -1,12 +1,20 @@
 import { db } from "./firebaseConfig.js";
-import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import {
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  updateDoc,
+  onSnapshot,
+  getDocs,
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 // Função para obter os inputs do formulário
 function getInputsQuarto() {
   return {
     numero: document.getElementById("numero"),
     categoria: document.getElementById("categoria"),
-    status: document.getElementById("status")
+    status: document.getElementById("status"),
   };
 }
 
@@ -15,7 +23,7 @@ function getValoresQuarto({ numero, categoria, status }) {
   return {
     numero: parseInt(numero.value),
     categoria: categoria.value.trim(),
-    status: status.value.trim()
+    status: status.value.trim(),
   };
 }
 
@@ -23,32 +31,34 @@ function getValoresQuarto({ numero, categoria, status }) {
 function limparInputsQuarto({ numero, categoria, status }) {
   numero.value = "";
   categoria.value = "";
-  status.value = ""
+  status.value = "";
 }
 
 // Cadastrar um quarto
-document.getElementById("btnCadastrar").addEventListener("click", async function () {
-  const Inputs = getInputsQuarto();
-  const dados = getValoresQuarto(Inputs);
+document
+  .getElementById("btnCadastrar")
+  .addEventListener("click", async function () {
+    const Inputs = getInputsQuarto();
+    const dados = getValoresQuarto(Inputs);
 
-  if (!dados.numero || !dados.categoria || !dados.status) {
-    alert("Preencha todos os campos.");
-    return;
-  }
+    if (!dados.numero || !dados.categoria || !dados.status) {
+      alert("Preencha todos os campos.");
+      return;
+    }
 
-  if (dados.numero < 1 || dados.numero > 50) {
-    alert("Número do quarto deve ser entre 1 e 50.");
-    return;
-  }
+    if (dados.numero < 1 || dados.numero > 50) {
+      alert("Número do quarto deve ser entre 1 e 50.");
+      return;
+    }
 
-  try {
-    await addDoc(collection(db, "quartos"), dados);
-    limparInputsQuarto(Inputs);
-    alert("Quarto cadastrado com sucesso!");
-  } catch (e) {
-    console.log("Erro: ", e);
-  }
-});
+    try {
+      await addDoc(collection(db, "quartos"), dados);
+      limparInputsQuarto(Inputs);
+      alert("Quarto cadastrado com sucesso!");
+    } catch (e) {
+      console.log("Erro: ", e);
+    }
+  });
 
 const listaQuartosDiv = document.getElementById("listar-quartos");
 
@@ -83,7 +93,7 @@ function renderizarListaDeQuartos(quartos) {
 // Carregar quartos em tempo real
 function carregarListaDeQuartosTempoReal() {
   onSnapshot(collection(db, "quartos"), (snapshot) => {
-    const quartos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const quartos = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     renderizarListaDeQuartos(quartos);
   });
 }
@@ -116,8 +126,11 @@ async function lidarCliqueQuarto(evento) {
   if (btnEditar) {
     const id = btnEditar.dataset.id;
     const quartosSnapshot = await getDocs(collection(db, "quartos"));
-    const quartos = quartosSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    const quarto = quartos.find(q => q.id === id);
+    const quartos = quartosSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    const quarto = quartos.find((q) => q.id === id);
     preencherFormularioEdicaoQuarto(quarto);
   }
 }
@@ -134,34 +147,38 @@ function preencherFormularioEdicaoQuarto(quarto) {
 }
 
 // Salvar a edição do quarto
-document.getElementById("btn-salvar-edicao-quarto").addEventListener("click", async () => {
-  const id = document.getElementById("editar-id-quarto").value;
-  const numero = parseInt(document.getElementById("editar-numero").value);
-  const categoria = document.getElementById("editar-categoria").value.trim();
-  const status = document.getElementById("editar-status").value.trim();
-  
+document
+  .getElementById("btn-salvar-edicao-quarto")
+  .addEventListener("click", async () => {
+    const id = document.getElementById("editar-id-quarto").value;
+    const numero = parseInt(document.getElementById("editar-numero").value);
+    const categoria = document.getElementById("editar-categoria").value.trim();
+    const status = document.getElementById("editar-status").value.trim();
 
-  if (!numero || !categoria || !status) {
-    alert("Preencha todos os campos!");
-    return;
-  }
+    if (!numero || !categoria || !status) {
+      alert("Preencha todos os campos!");
+      return;
+    }
 
-  if (numero < 1 || numero > 50) {
-    alert("Número do quarto deve ser entre 1 e 50.");
-    return;
-  }
+    if (numero < 1 || numero > 50) {
+      alert("Número do quarto deve ser entre 1 e 50.");
+      return;
+    }
 
-  try {
-    const ref = doc(db, "quartos", id);
-    await updateDoc(ref, { numero, categoria, status : status || null });
-    document.getElementById("formulario-edicao-quarto").style.display = "none";
-    alert("Quarto editado com sucesso!");
-  } catch (erro) {
-    console.log("Erro ao editar quarto", erro);
-  }
-});
+    try {
+      const ref = doc(db, "quartos", id);
+      await updateDoc(ref, { numero, categoria, status: status || null });
+      document.getElementById("formulario-edicao-quarto").style.display =
+        "none";
+      alert("Quarto editado com sucesso!");
+    } catch (erro) {
+      console.log("Erro ao editar quarto", erro);
+    }
+  });
 
 // Cancelar a edição do quarto
-document.getElementById("btn-cancelar-edicao-quarto").addEventListener("click", () => {
-  document.getElementById("formulario-edicao-quarto").style.display = "none";
-});
+document
+  .getElementById("btn-cancelar-edicao-quarto")
+  .addEventListener("click", () => {
+    document.getElementById("formulario-edicao-quarto").style.display = "none";
+  });
