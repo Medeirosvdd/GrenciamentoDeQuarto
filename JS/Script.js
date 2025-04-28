@@ -6,27 +6,24 @@ function getInputsQuarto() {
   return {
     numero: document.getElementById("numero"),
     categoria: document.getElementById("categoria"),
-    status: document.getElementById("status"),
-    imagem: document.getElementById("imagem"),
+    status: document.getElementById("status")
   };
 }
 
 // Função para obter os valores do quarto
-function getValoresQuarto({ numero, categoria, status, imagem }) {
+function getValoresQuarto({ numero, categoria, status }) {
   return {
     numero: parseInt(numero.value),
     categoria: categoria.value.trim(),
-    status: status.value.trim(),
-    imagem: imagem.files[0] ? URL.createObjectURL(imagem.files[0]) : "",
+    status: status.value.trim()
   };
 }
 
 // Função para limpar os inputs
-function limparInputsQuarto({ numero, categoria, status, imagem }) {
+function limparInputsQuarto({ numero, categoria, status }) {
   numero.value = "";
   categoria.value = "";
-  status.value = "";
-  imagem.value = "";
+  status.value = ""
 }
 
 // Cadastrar um quarto
@@ -71,7 +68,6 @@ function renderizarListaDeQuartos(quartos) {
     quartoDiv.classList.add("card", "mb-3", "col-12", "col-md-6", "col-lg-4");
 
     quartoDiv.innerHTML = `
-      <img src="${quarto.imagem || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Imagem do Quarto">
       <div class="card-body">
         <h5 class="card-title">Quarto ${quarto.numero}</h5>
         <p class="card-text">Categoria: ${quarto.categoria}</p>
@@ -133,7 +129,6 @@ function preencherFormularioEdicaoQuarto(quarto) {
   document.getElementById("editar-numero").value = quarto.numero;
   document.getElementById("editar-categoria").value = quarto.categoria;
   document.getElementById("editar-status").value = quarto.status;
-  document.getElementById("editar-imagem-preview").src = quarto.imagem || 'https://via.placeholder.com/150';
   document.getElementById("editar-id-quarto").value = quarto.id;
   document.getElementById("formulario-edicao-quarto").style.display = "block";
 }
@@ -144,15 +139,7 @@ document.getElementById("btn-salvar-edicao-quarto").addEventListener("click", as
   const numero = parseInt(document.getElementById("editar-numero").value);
   const categoria = document.getElementById("editar-categoria").value.trim();
   const status = document.getElementById("editar-status").value.trim();
-  const imagemInput = document.getElementById("editar-imagem");
   
-  let imagem = "";
-
-  if (imagemInput.files[0]) {
-    imagem = URL.createObjectURL(imagemInput.files[0]);
-  } else {
-    imagem = document.getElementById("editar-imagem-preview").src;
-  }
 
   if (!numero || !categoria || !status) {
     alert("Preencha todos os campos!");
@@ -166,7 +153,7 @@ document.getElementById("btn-salvar-edicao-quarto").addEventListener("click", as
 
   try {
     const ref = doc(db, "quartos", id);
-    await updateDoc(ref, { numero, categoria, status, imagem: imagem || null });
+    await updateDoc(ref, { numero, categoria, status : status || null });
     document.getElementById("formulario-edicao-quarto").style.display = "none";
     alert("Quarto editado com sucesso!");
   } catch (erro) {
