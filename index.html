@@ -3,11 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="Style.css" />
-    <title>Gerenciamento de Quartos</title>
+    <link rel="stylesheet" href="css/NavBar.css" />
+    <link rel="stylesheet" href="css/Style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link rel="icon" href="img/Logo.svg" />
+    <title>Recanto Feliz</title>
   </head>
-
   <body>
+    <header>
+      <div class="header-content">
+        <nav>
+          <div class="menu-icon">
+            <span class="fas fa-bars"></span>
+          </div>
+          <div class="logo">Recanto Feliz</div>
+          <div class="nav-items">
+            <li><a href="index.html">Cadastrar</a></li>
+            <li><a href="sobre.html">Consultar</a></li>
+            <li><a href="projetos.html">Sobre</a></li>
+            <li><a href="contatos.html">Contatos</a></li>
+          </div>
+          <div class="search-icon">
+            <span class="fas fa-search"></span>
+          </div>
+          <div class="cancel-icon">
+            <span class="fas fa-times"></span>
+          </div>
+        </nav>
+      </div>
+    </header>
+
     <div class="container">
       <h1>Gerenciamento de Quartos</h1>
       <div class="Ce">
@@ -73,7 +98,12 @@
       </div>
     </div>
 
+    <footer>
+      <p>&copy; 2025 Recanto Feliz. Todos os direitos reservados.</p>
+    </footer>
+
     <script type="module" src="JS/firebaseConfig.js"></script>
     <script type="module" src="JS/Script.js"></script>
+    <script type="module" src="JS/NavBar.js"></script>
   </body>
 </html>
